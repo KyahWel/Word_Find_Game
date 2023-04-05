@@ -1,8 +1,7 @@
 <template>
-  <main>
-      <MainMenu/>
-  </main>
- 
+    <div>
+
+    </div>
 </template>
 
 <script>
@@ -17,3 +16,7 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+
+</style>
