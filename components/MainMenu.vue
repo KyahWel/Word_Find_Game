@@ -1,26 +1,25 @@
 <template>
     <div class="main-container">
-        <h1>WORD FIND</h1>
-        <div class="button-class">
-            <b-button v-b-modal.modal-play pill class="button-design-play">Play</b-button>
-            <b-button v-b-modal.modal-settings pill class="button-design-settings">Settings</b-button>
+        <transition name="home">
+            <MainGame v-if="playInit" />
+        </transition>
+        
+        <div v-if="!playInit" class="menu">
+            <h1>WORD FIND</h1>
+            <div v-if="!playInit" class="button-class">
+                <b-button @click="playInit= true" pill class="button-design-play">Play</b-button>
+                <b-button v-b-modal.modal-settings pill class="button-design-settings">Settings</b-button>
+            </div>
+            
+            <b-modal id="modal-settings" 
+                no-close-on-backdrop 
+                ok-only
+                centered 
+                title="Settings">
+                <p class="my-4">Settings part</p>
+            </b-modal>
         </div>
-
-        <b-modal id="modal-play" 
-            no-close-on-backdrop 
-            centered 
-            ok-only
-            title="Select Difficulty">
-            <p class="my-4">This is difficulty selection part</p>
-        </b-modal>
-
-        <b-modal id="modal-settings" 
-            no-close-on-backdrop 
-            ok-only
-            centered 
-            title="Settings">
-            <p class="my-4">Settings part</p>
-        </b-modal>
+      
     </div> 
 
 </template>
@@ -29,7 +28,7 @@
 export default {
   data(){
     return{
-
+        playInit: false
       }
     },
   methods: {
@@ -40,6 +39,8 @@ export default {
    
 
 <style scoped>
+    .home-enter-active, .home-leave-active { transition: opacity .5s; }
+    .home-enter, .home-leave-active { opacity: 0; }
     .main-container{
         display:flex;
         flex-direction: column;
@@ -55,14 +56,14 @@ export default {
         background-size: cover;
     }
 
-    h1{
+    .menu h1{
         font-family: 'Bangers', cursive;
         font-size: 190px;
         color: white;
         text-shadow: 2px 2px 4px #000000;
     }
 
-    .button-class{
+    .menu .button-class {
         display: flex;
         justify-content: center;
         gap: 1em;
@@ -70,11 +71,10 @@ export default {
     }
 
     /* pakiedit ng design */
-    .button-design-play{
+    .menu .button-design-play{
         background-color: rgb(73, 248, 73);
         font-family: 'Coiny', cursive;
         font-weight: 800;
-        background-color: rgb(73, 248, 73);
         font-size: 2em;
         width: 20%;
         padding: 8px 2px;
@@ -83,26 +83,48 @@ export default {
     }
 
     /* pakiedit ng design */
-    .button-design-play:hover{
+    .menu .button-design-play:hover{
        
     }
 
     /* pakiedit ng design */
-    .button-design-settings{
+    .menu .button-design-settings{
         background-color: #397691;
         font-family: 'Coiny', cursive;
         font-weight: 800;
         border: 2px solid #397691;
         font-size: 2em;
         padding: 8px 2px;
-        width: 20%;
+        width: 30%;
         text-shadow: 2px 2px 4px #000000;
         box-shadow: 2px 2px 4px #000000;
     }
 
     /* pakiedit ng design */
-    .button-design-settings:hover{
+    .menu .button-design-settings:hover{
        
+    }
+
+    .menu .button-design-diff{
+        background-color: rgb(73, 248, 73);
+        font-family: 'Coiny', cursive;
+        font-weight: 800;
+        font-size: 2em;
+        width: 20%;
+        padding: 8px 2px;
+        text-shadow: 2px 2px 4px #000000;
+        box-shadow: 2px 2px 4px #000000;
+    }
+
+    /* pakiedit ng design */
+    .menu .button-design-play:hover{
+       
+    }
+
+    .menu .difficulty{
+        display: flex;
+        gap: 1em;
+        justify-content: center;
     }
 
 </style>
