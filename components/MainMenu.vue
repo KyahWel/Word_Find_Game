@@ -16,7 +16,7 @@
                         <b-button v-b-modal.modal-multi-theme></b-button>
                     </p>
                 <b-button class="mt-3" block pill v-b-modal.modal-multi-credits><h3>SHOW CREDITS</h3></b-button>
-                </b-modal>
+            </b-modal>
 
             <b-modal id="modal-multi-theme" hide-footer centered>
                 <template #modal-title><h1>CHOOSE THEME</h1></template>
@@ -57,13 +57,13 @@
                     { name: 'Austin', image: 'https://via.placeholder.com/100' },
                 ],
                 themes: [
-                { name: 'Theme 1', image: 'https://via.placeholder.com/100' },
-                { name: 'Theme 2', image: 'https://via.placeholder.com/100' },
-                { name: 'Theme 3', image: 'https://via.placeholder.com/100' },
-                { name: 'Theme 4', image: 'https://via.placeholder.com/100' },
-                { name: 'Theme 5', image: 'https://via.placeholder.com/100' },
-                { name: 'Theme 6', image: 'https://via.placeholder.com/100' },
-            ],
+                    { name: 'Theme 1', image: 'https://via.placeholder.com/100' },
+                    { name: 'Theme 2', image: 'https://via.placeholder.com/100' },
+                    { name: 'Theme 3', image: 'https://via.placeholder.com/100' },
+                    { name: 'Theme 4', image: 'https://via.placeholder.com/100' },
+                    { name: 'Theme 5', image: 'https://via.placeholder.com/100' },
+                    { name: 'Theme 6', image: 'https://via.placeholder.com/100' },
+                ],
             }
         },
         methods: {}
