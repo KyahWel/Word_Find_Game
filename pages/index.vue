@@ -16,7 +16,7 @@
               <b-container fluid>
                   <b-row>
                   <b-col v-for="(item, index) in credits" :key="index" cols="12" sm="6" md="4" class="mb-3">
-                      <img :src="item.image" :alt="item.name" class="img-fluid mb-2" width="100" height="100">
+                      <img :src="item.image" :alt="item.name" class="img-fluid mb-2" width="120" height="120">
                       <p class="mb-0">{{ item.name }}</p>
                   </b-col>
                   </b-row>
@@ -35,9 +35,9 @@
               time: 180, //in seconds
               words: ['test', 'banana', 'cherry', 'date', 'fig', 'grape', 'honeydew', 'kiwi', 'lemon'],
               credits: [
-                  { name: 'William', image: 'https://via.placeholder.com/100' },
-                  { name: 'Franco', image: 'https://via.placeholder.com/100' },
-                  { name: 'Austin', image: 'https://via.placeholder.com/100' },
+                  { name: 'William', image: 'https://scontent.fmnl17-3.fna.fbcdn.net/v/t39.30808-6/336363750_220454573815237_7365260229457514060_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=09cbfe&_nc_eui2=AeFYMTWeFUT6nkf-dK80CFqxCiCQWJkVXcwKIJBYmRVdzNRI0Ef9JAZtKeB8z-l4WMXetOIPqAA05EqqDyLS6_Xs&_nc_ohc=gXswci9e-igAX_sESip&_nc_ht=scontent.fmnl17-3.fna&oh=00_AfC1ig3OMvh8w4A8gnN1L_p53YoDiTHfYl0ZnRhcnuS2sg&oe=6439E57F' },
+                  { name: 'Franco', image: 'https://scontent.fmnl17-5.fna.fbcdn.net/v/t39.30808-1/311998514_2533906706752320_799316179013250804_n.jpg?stp=c0.25.160.160a_dst-jpg_p160x160&_nc_cat=105&ccb=1-7&_nc_sid=7206a8&_nc_eui2=AeFoQodgFGEdlShwKvzojp2fhggm0m5coLKGCCbSblygsnsptsuY1kJazoVox4pFQM_xUhxJH-x4pDybsQOQ3Nsz&_nc_ohc=PZXmiVoi52UAX-sD6G3&_nc_ht=scontent.fmnl17-5.fna&oh=00_AfB-5HhwztK0kx3kl0OZsNENgOAELs1CH4PNL2vprUlmsg&oe=6439C342' },
+                  { name: 'Austin', image: 'https://scontent.fmnl17-1.fna.fbcdn.net/v/t39.30808-6/329211306_1232696774331423_6929020937128405754_n.jpg?stp=cp6_dst-jpg&_nc_cat=100&ccb=1-7&_nc_sid=09cbfe&_nc_eui2=AeFmUUoLzcYVkogEPFkLqQH3JfQxC_Uqbbwl9DEL9SptvFFEwSc1LoaKZxvfCfnQlZxSZ4goNavimWBVcLs8snZx&_nc_ohc=_Oa-ka3qumgAX8JZw_Y&_nc_ht=scontent.fmnl17-1.fna&oh=00_AfC5qa6Q2qe_sL24Nvhnf_nZW_sMkhFsQ9HF12REkZOPhw&oe=643B3E5D' },
               ],
           }
       },
@@ -96,13 +96,7 @@
         justify-content: center;
     }
     .modal-header {
-        display: flex;
-        align-items: flex-start;
-        justify-content: space-between;
-        padding: 1rem 1rem;
-        border-bottom: none !important;
-        border-top-left-radius: calc(0.3rem - 1px);
-        border-top-right-radius: calc(0.3rem - 1px);
+        background-color: transparent !important;
     }
     button {
         height: 60px;
@@ -145,5 +139,16 @@
     .button-credits:active {
         box-shadow: 0 5px #6d9fb6;
         transform: translateY(4px);
+    }
+    .mb-0{
+        font-family: 'Bangers', cursive;
+        font-size: 1.9em;
+    }
+    .modal-header h1, .h1{
+        font-family: 'Bangers', cursive;
+        font-size: 3em !important;
+    }
+    .mb-3{
+        
     }
 </style>

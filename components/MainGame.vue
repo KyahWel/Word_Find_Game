@@ -1,7 +1,7 @@
 <template>
   <div class="main-container-game">
     <div class="header">
-      <a v-b-modal.modal-multi-game-settings><i class="fa-solid fa-gears"></i></a>
+      <a v-b-modal.modal-multi-game-settings><i class="fa-sharp fa-solid fa-gear" style="color: #ffffff;"></i></a>
     </div>
     <div v-if="this.remainingWords === 0" id="open-modal-success" class="modal-window-success">
       <div>
@@ -33,7 +33,7 @@
         </div>
         <div class="right">
           <div class="timer">
-          <p><i class="fa-solid fa-clock"></i>{{minutes}}:{{ seconds }}</p>
+            <p><i class="fa-solid fa-clock"></i>{{minutes}}:{{ seconds }}</p>
           </div>
           <h1>Words to Find</h1>
           <b-container>
@@ -47,13 +47,13 @@
       </div>
       <b-modal id="modal-multi-game-settings" no-close-on-backdrop centered hide-footer hide-header>
         <template #default="{ close }">
-          <b-button @click="close()" block class="button-play">
-            <h3>CONTINUE</h3>
-          </b-button>             
-          <b-button v-b-modal.modal-multi-2 block class="button-quit-game">
-            <h3>QUIT GAME</h3>
-          </b-button>
-        </template>
+            <b-button @click="close()" block class="button-play">
+              <h3>CONTINUE</h3>
+            </b-button>             
+            <b-button v-b-modal.modal-multi-2 block class="button-quit-game">
+              <h3>QUIT GAME</h3>
+            </b-button>
+</template>
       </b-modal>
 
       <b-modal id="modal-multi-2" no-close-on-backdrop centered hide-footer>
@@ -67,25 +67,23 @@
 </template>
 
 <script>
-export default {
-  
-  props:['words','time'],
-  data(){
-    return{
-      numRows: this.words.length * 2,
-      numCols: this.words.length * 2 ,
-      timerCount: this.time, 
-      minutes: Math.floor(this.time / 60),
-      seconds: this.time>=60 ? "00" : String(this.time),
-      tempWords: [],
-      remainingWords: this.words.length
+  export default {
+    props: ['words', 'time'],
+    data() {
+      return {
+        numRows: this.words.length * 2,
+        numCols: this.words.length * 2,
+        timerCount: this.time,
+        minutes: Math.floor(this.time / 60),
+        seconds: this.time >= 60 ? "00" : String(this.time),
+        tempWords: [],
+        remainingWords: this.words.length
       }
     },
     computed: {
-    failed: function() {
-      return this.timerCount === 0;
+      failed: function() {
+        return this.timerCount === 0;
       },
-
     },
     watch: {
       timerCount: {
@@ -94,7 +92,7 @@ export default {
             setTimeout(() => {
               this.timerCount--;
               this.minutes = Math.floor(this.timerCount / 60);
-              this.seconds = String(this.timerCount > 59 ? this.timerCount - (60*(this.minutes)) : this.timerCount)
+              this.seconds = String(this.timerCount > 59 ? this.timerCount - (60 * (this.minutes)) : this.timerCount)
               this.seconds = this.seconds.length === 1 ? "0" + this.seconds : this.seconds
             }, 1000);
           }
@@ -129,7 +127,7 @@ export default {
         return status
       },
       placeCorrectWords(wordsArray) {
-        var positions = ['row', 'column','diagonal']
+        var positions = ['row', 'column', 'diagonal']
         var nextLetter = 0
         var newStartPoint = 0
         const cells = document.querySelectorAll('#board .cell-data');
@@ -148,52 +146,48 @@ export default {
               var newColumnPoint = this.numCols - wordsArray[i].length
               newStartPoint = arr.indexOf(document.querySelector(`.cell-data[data-row="${startRow}"][data-column="${newColumnPoint}"]`))
             }
-          } 
-          else if(getOrientation === 'column'){
+          } else if (getOrientation === 'column') {
             nextLetter = this.numCols
-            if((startRow*1)+ wordsArray[i].length <= this.numRows){
+            if ((startRow * 1) + wordsArray[i].length <= this.numRows) {
               newStartPoint = start
-            }
-            else{
+            } else {
               var newRowPoint = this.numRows - wordsArray[i].length
               newStartPoint = arr.indexOf(document.querySelector(`.cell-data[data-row="${newRowPoint}"][data-column="${startColumn}"]`))
             }
-          }
-          else if(getOrientation === 'diagonal'){
-          nextLetter = 1 + this.numCols
-          if((startColumn*1)+ wordsArray[i].length <= this.numCols && 
-          (startRow*1)+ wordsArray[i].length <= this.numRows){
-            newStartPoint = start
-          }
-          //Column
-          if((startColumn*1)+ wordsArray[i].length > this.numCols){
-            var newColStartPoint = this.numCols - wordsArray[i].length
-            newStartPoint = arr.indexOf(document.querySelector(`.cell-data[data-row="${startRow}"][data-column="${newColStartPoint}"]`))
-          }
-           //Row
-           if((startRow*1)+ wordsArray[i].length > this.numRows ){
-            var newRowStartPoint= (this.numRows - wordsArray[i].length)+1
-            newStartPoint = arr.indexOf(document.querySelector(`.cell-data[data-row="${newRowStartPoint}"][data-column="${startColumn}"]`))
-          }
-          if((startColumn*1)+ wordsArray[i].length > this.numCols && 
-          (startRow*1)+ wordsArray[i].length > this.numRows){
-            var newColStartPoint = this.numRows - wordsArray[i].length
-            var newRowStartPoint= this.numCols - wordsArray[i].length
-            newStartPoint = arr.indexOf(document.querySelector(`.cell-data[data-row="${newRowStartPoint}"][data-column="${newColStartPoint}"]`))
-              }
+          } else if (getOrientation === 'diagonal') {
+            nextLetter = 1 + this.numCols
+            if ((startColumn * 1) + wordsArray[i].length <= this.numCols &&
+              (startRow * 1) + wordsArray[i].length <= this.numRows) {
+              newStartPoint = start
+            }
+            //Column
+            if ((startColumn * 1) + wordsArray[i].length > this.numCols) {
+              var newColStartPoint = this.numCols - wordsArray[i].length
+              newStartPoint = arr.indexOf(document.querySelector(`.cell-data[data-row="${startRow}"][data-column="${newColStartPoint}"]`))
+            }
+            //Row
+            if ((startRow * 1) + wordsArray[i].length > this.numRows) {
+              var newRowStartPoint = (this.numRows - wordsArray[i].length) + 1
+              newStartPoint = arr.indexOf(document.querySelector(`.cell-data[data-row="${newRowStartPoint}"][data-column="${startColumn}"]`))
+            }
+            if ((startColumn * 1) + wordsArray[i].length > this.numCols &&
+              (startRow * 1) + wordsArray[i].length > this.numRows) {
+              var newColStartPoint = this.numRows - wordsArray[i].length
+              var newRowStartPoint = this.numCols - wordsArray[i].length
+              newStartPoint = arr.indexOf(document.querySelector(`.cell-data[data-row="${newRowStartPoint}"][data-column="${newColStartPoint}"]`))
+            }
           }
           var characters = wordsArray[i].split("");
           var nextPosition = 0
           var isCellOccupied = this.checkCellOccupied(wordsArray[i], newStartPoint, getOrientation)
-          if(isCellOccupied === 'empty'){
-              characters.forEach(item => {
+          if (isCellOccupied === 'empty') {
+            characters.forEach(item => {
               individuals[newStartPoint + nextPosition].innerText = item
               individuals[newStartPoint + nextPosition].setAttribute('data-word', wordsArray[i])
               //individuals[newStartPoint + nextPosition].style.backgroundColor = "rgb(11, 253, 11)";
               nextPosition += nextLetter;
             });
-          }
-          else {
+          } else {
             this.tempWords.push(wordsArray[i])
           }
           console.log(`${wordsArray[i]} is placed`)
@@ -208,74 +202,67 @@ export default {
           }
         }
       },
-   
-  },
-  mounted(){
-    this.placeCorrectWords(this.words)
-    this.placeCorrectWords(this.tempWords)
-    this.generateRandomLetter()
-
-    const cells = document.querySelectorAll('#board .cell-data');
-    const board = document.getElementById('board');
-    let isDragging = false
-    var columnSelected = []
-    var rowSelected = []
-    var selectedAnswer = ""
-
-    cells.forEach(cell => {
-    cell.addEventListener('mousedown', event => {
-      if(!event.target.classList.contains('correct')){
-        const startRow = parseInt(event.target.getAttribute('data-row'));
-        const startCol = parseInt(event.target.getAttribute('data-column'));
-        isDragging = true;
-        event.target.classList.add('selected')
-        console.log(event.target)
-        selectedAnswer += event.target.innerText
-        columnSelected.push(startCol)
-        rowSelected.push(startRow)
-      }
-      
-    });
-
-    cell.addEventListener('mouseup', () => {
-        cells.forEach(cellDeselect =>{
-          cellDeselect.classList.remove('selected');
-        });
-        isDragging = false;
-        if(this.words.some(item => item.toLowerCase() === selectedAnswer.toLowerCase())){
-          this.remainingWords--;
-          for(let i=0; i<columnSelected.length;i++){
-            let rowCorrect = rowSelected[i]
-            let colCorrect = columnSelected[i]
-            const cell = document.querySelector(`.cell-data[data-row="${rowCorrect}"][data-column="${colCorrect}"]`);
-            cell.classList.add('correct')
+    },
+    mounted() {
+      this.placeCorrectWords(this.words)
+      this.placeCorrectWords(this.tempWords)
+      this.generateRandomLetter()
+      const cells = document.querySelectorAll('#board .cell-data');
+      const board = document.getElementById('board');
+      let isDragging = false
+      var columnSelected = []
+      var rowSelected = []
+      var selectedAnswer = ""
+      cells.forEach(cell => {
+        cell.addEventListener('mousedown', event => {
+          if (!event.target.classList.contains('correct')) {
+            const startRow = parseInt(event.target.getAttribute('data-row'));
+            const startCol = parseInt(event.target.getAttribute('data-column'));
+            isDragging = true;
+            event.target.classList.add('selected')
+            console.log(event.target)
+            selectedAnswer += event.target.innerText
+            columnSelected.push(startCol)
+            rowSelected.push(startRow)
           }
-        }
-        selectedAnswer = ""
-        columnSelected = []
-        rowSelected = []
-        console.log(this.remainingWords)
+        });
+        cell.addEventListener('mouseup', () => {
+          cells.forEach(cellDeselect => {
+            cellDeselect.classList.remove('selected');
+          });
+          isDragging = false;
+          if (this.words.some(item => item.toLowerCase() === selectedAnswer.toLowerCase())) {
+            this.remainingWords--;
+            for (let i = 0; i < columnSelected.length; i++) {
+              let rowCorrect = rowSelected[i]
+              let colCorrect = columnSelected[i]
+              const cell = document.querySelector(`.cell-data[data-row="${rowCorrect}"][data-column="${colCorrect}"]`);
+              cell.classList.add('correct')
+            }
+          }
+          selectedAnswer = ""
+          columnSelected = []
+          rowSelected = []
+          console.log(this.remainingWords)
+        });
       });
-    });
-
-    board.addEventListener('mouseover', event => {
-    if(!event.target.classList.contains('correct')){
-      if (isDragging) {
-        const currentRow = parseInt(event.target.getAttribute('data-row'));
-        const currentCol = parseInt(event.target.getAttribute('data-column'));
-        const cell = document.querySelector(`.cell-data[data-row="${currentRow}"][data-column="${currentCol}"]`);
+      board.addEventListener('mouseover', event => {
+        if (!event.target.classList.contains('correct')) {
+          if (isDragging) {
+            const currentRow = parseInt(event.target.getAttribute('data-row'));
+            const currentCol = parseInt(event.target.getAttribute('data-column'));
+            const cell = document.querySelector(`.cell-data[data-row="${currentRow}"][data-column="${currentCol}"]`);
             if (cell) {
               cell.classList.add('selected');
               selectedAnswer += cell.innerText
             }
-        columnSelected.push(currentCol)
-        rowSelected.push(currentRow)
-        } 
-      }
-     });
-  },
-  
-}
+            columnSelected.push(currentCol)
+            rowSelected.push(currentRow)
+          }
+        }
+      });
+    },
+  }
 </script>
 
 
@@ -284,12 +271,10 @@ export default {
   .selected {
     background-color: blue;
   }
-
   .correct {
     background-color: rgb(11, 253, 11)
   }
-
-  .board{
+  .board {
     background-color: white;
   }
   .main-container-game {
@@ -310,23 +295,19 @@ export default {
     justify-content: flex-end;
     padding: 10px 20px;
   }
-
   .main-content {
     display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
     flex-grow: 1;
- }
-
-  .row{
-    margin:0;
+  }
+  .row {
+    margin: 0;
   }
   .grid {
     display: flex;
-   
     width: 100%;
-  
   }
   .left {
     display: flex;
@@ -347,22 +328,22 @@ export default {
     /* border: 1px solid red; */
     width: 100%;
     background-image: radial-gradient(#293B57, #1C2842);
-    gap: 2rem ;
+    gap: 2rem;
   }
- .right .timer{
-  border-radius: 10px;
-  background-image: radial-gradient(#293B57, #1C2842);
-  box-shadow: inset 0 0 100px hsla(0,0%,0%,.3);
-  width: 200px;
-  height: 80px;
-  text-align: center;
-  font-size: 3rem;
-  justify-content: center;
-  align-items: center;
- }
- .right h1{
-  font-size: 4rem;
- }
+  .right .timer {
+    border-radius: 10px;
+    background-image: radial-gradient(#293B57, #1C2842);
+    box-shadow: inset 0 0 100px hsla(0, 0%, 0%, .3);
+    width: 200px;
+    height: 80px;
+    text-align: center;
+    font-size: 3rem;
+    justify-content: center;
+    align-items: center;
+  }
+  .right h1 {
+    font-size: 4rem;
+  }
   .col-design {
     padding: 0;
     border: 2px solid rgb(12, 12, 12);
@@ -456,7 +437,6 @@ export default {
     background-color: #1ab634bd;
     transition: all 0.3s;
   }
-
   .modal-window-success>div {
     color: #fff;
     width: 600px;
@@ -489,7 +469,6 @@ export default {
     top: 0;
     width: 70px;
     text-decoration: none;
-   
   }
   .modal-close-success:hover {
     color: black;
@@ -507,7 +486,6 @@ export default {
     background-color: #ff0000bd;
     transition: all 0.3s;
   }
-
   .modal-window-failed>div {
     color: #fff;
     width: 600px;
@@ -547,5 +525,13 @@ export default {
     justify-content: center;
     gap: 2em;
     width: 100%;
+  }
+  .settings-icon{
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-end !important;
+  }
+  a i{
+    font-size: 3em;
   }
 </style>
