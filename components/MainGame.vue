@@ -128,7 +128,7 @@ export default {
         return status
       },
       placeCorrectWords(wordsArray) {
-        var positions = ['row', 'column']
+        var positions = ['row', 'column', 'diagonal']
         var nextLetter = 0
         var newStartPoint = 0
         const cells = document.querySelectorAll('#board .cell-data');
