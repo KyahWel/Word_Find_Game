@@ -10,9 +10,9 @@
                 <b-button v-b-modal.modal-multi-credits class="button-credits">Credits</b-button>
             </div>
           <b-modal id="modal-multi-credits" hide-footer centered>
-<template #modal-title>
-    <h1>CREDITS</h1>
-</template>
+            <template #modal-title>
+                <h1>CREDITS</h1>
+            </template>
               <b-container fluid>
                   <b-row>
                   <b-col v-for="(item, index) in credits" :key="index" cols="12" sm="6" md="4" class="mb-3">
@@ -33,7 +33,7 @@
           return {
               playInit: false,
               time: 180, //in seconds
-              words: ['test', 'banana', 'cherry', 'date', 'fig', 'grape', 'honeydew', 'kiwi', 'lemon'],
+              words: ['test', 'pants', 'banana', 'cherry', 'date', 'fig', 'grape', 'honeydew', 'kiwi', 'lemon'],
               credits: [
                   { name: 'William', image: 'https://scontent.fmnl17-3.fna.fbcdn.net/v/t39.30808-6/336363750_220454573815237_7365260229457514060_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=09cbfe&_nc_eui2=AeFYMTWeFUT6nkf-dK80CFqxCiCQWJkVXcwKIJBYmRVdzNRI0Ef9JAZtKeB8z-l4WMXetOIPqAA05EqqDyLS6_Xs&_nc_ohc=gXswci9e-igAX_sESip&_nc_ht=scontent.fmnl17-3.fna&oh=00_AfC1ig3OMvh8w4A8gnN1L_p53YoDiTHfYl0ZnRhcnuS2sg&oe=6439E57F' },
                   { name: 'Franco', image: 'https://scontent.fmnl17-5.fna.fbcdn.net/v/t39.30808-1/311998514_2533906706752320_799316179013250804_n.jpg?stp=c0.25.160.160a_dst-jpg_p160x160&_nc_cat=105&ccb=1-7&_nc_sid=7206a8&_nc_eui2=AeFoQodgFGEdlShwKvzojp2fhggm0m5coLKGCCbSblygsnsptsuY1kJazoVox4pFQM_xUhxJH-x4pDybsQOQ3Nsz&_nc_ohc=PZXmiVoi52UAX-sD6G3&_nc_ht=scontent.fmnl17-5.fna&oh=00_AfB-5HhwztK0kx3kl0OZsNENgOAELs1CH4PNL2vprUlmsg&oe=6439C342' },
@@ -140,15 +140,51 @@
         box-shadow: 0 5px #6d9fb6;
         transform: translateY(4px);
     }
-    .mb-0{
-        font-family: 'Bangers', cursive;
-        font-size: 1.9em;
-    }
-    .modal-header h1, .h1{
-        font-family: 'Bangers', cursive;
-        font-size: 3em !important;
-    }
-    .mb-3{
+
+    @media screen and (max-width: 769px){
+    .menu h1 {
+      font-size: 100px;
+     }
+     button {
+        height: 60px;
+        border-radius: 15px;
+        font-weight: 800;
+
+        font-size: 1.5em;
+        }
         
     }
+
+    @media screen and (max-width: 767px){
+        .img-fluid{
+            width: 200px !important;
+            height: 200px  !important;
+        }
+
+        .name{
+            font-size: 30px !important;
+        }
+
+    }
+
+    @media screen and (max-width: 376px){
+    .menu{
+        text-align: center;
+    }
+    .menu h1 {
+      font-size: 60px;
+     }
+     button {
+        height: 40px;
+        border-radius: 15px;
+        font-weight: 800;
+        -webkit-text-stroke: .1px #000000;
+        font-size: 1em;
+        }
+         .button-credits {
+        -webkit-text-stroke: .1px #000000;
+        }
+    }
+   
+    
 </style>

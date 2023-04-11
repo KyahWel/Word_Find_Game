@@ -33,12 +33,12 @@
         </div>
         <div class="right">
           <div class="timer">
-            <p><i class="fa-solid fa-clock"></i>{{minutes}}:{{ seconds }}</p>
+            <p><i class="fa-solid fa-clock"></i> {{minutes}}:{{ seconds }}</p>
           </div>
           <h1>Words to Find</h1>
           <b-container>
             <b-row class="text-center">
-              <b-col v-for="word in words" :key="word" cols="4">
+              <b-col v-for="word in words" :key="word" :class="word" style="width: 70%" cols="4">
                 {{word}}
               </b-col>
             </b-row>
@@ -67,17 +67,18 @@
 </template>
 
 <script>
-  export default {
-    props: ['words', 'time'],
-    data() {
-      return {
-        numRows: this.words.length * 2,
-        numCols: this.words.length * 2,
-        timerCount: this.time,
-        minutes: Math.floor(this.time / 60),
-        seconds: this.time >= 60 ? "00" : String(this.time),
-        tempWords: [],
-        remainingWords: this.words.length
+export default {
+  
+  props:['words','time'],
+  data(){
+    return{
+      numRows: 20,
+      numCols: 20,
+      timerCount: this.time, 
+      minutes: Math.floor(this.time / 60),
+      seconds: this.time>=60 ? "00" : String(this.time),
+      tempWords: [],
+      remainingWords: this.words.length
       }
     },
     computed: {
@@ -88,7 +89,7 @@
     watch: {
       timerCount: {
         handler(value) {
-          if (value > 0) {
+          if (value > 0 && this.remainingWords!=0) {
             setTimeout(() => {
               this.timerCount--;
               this.minutes = Math.floor(this.timerCount / 60);
@@ -127,7 +128,7 @@
         return status
       },
       placeCorrectWords(wordsArray) {
-        var positions = ['row', 'column', 'diagonal']
+        var positions = ['row', 'column']
         var nextLetter = 0
         var newStartPoint = 0
         const cells = document.querySelectorAll('#board .cell-data');
@@ -184,13 +185,13 @@
             characters.forEach(item => {
               individuals[newStartPoint + nextPosition].innerText = item
               individuals[newStartPoint + nextPosition].setAttribute('data-word', wordsArray[i])
-              //individuals[newStartPoint + nextPosition].style.backgroundColor = "rgb(11, 253, 11)";
+              //individuals[newStartPoint + nextPosition].style.color = "rgb(11, 253, 11)";
               nextPosition += nextLetter;
             });
           } else {
             this.tempWords.push(wordsArray[i])
           }
-          console.log(`${wordsArray[i]} is placed`)
+          //console.log(`${wordsArray[i]} is placed`)
         }
       },
       generateRandomLetter() {
@@ -220,7 +221,6 @@
             const startCol = parseInt(event.target.getAttribute('data-column'));
             isDragging = true;
             event.target.classList.add('selected')
-            console.log(event.target)
             selectedAnswer += event.target.innerText
             columnSelected.push(startCol)
             rowSelected.push(startRow)
@@ -231,19 +231,24 @@
             cellDeselect.classList.remove('selected');
           });
           isDragging = false;
+          
           if (this.words.some(item => item.toLowerCase() === selectedAnswer.toLowerCase())) {
             this.remainingWords--;
+            const getWord = document.getElementsByClassName(selectedAnswer.toLowerCase())
+            getWord[0].style.color = "rgb(11, 253, 11)"
             for (let i = 0; i < columnSelected.length; i++) {
               let rowCorrect = rowSelected[i]
               let colCorrect = columnSelected[i]
               const cell = document.querySelector(`.cell-data[data-row="${rowCorrect}"][data-column="${colCorrect}"]`);
               cell.classList.add('correct')
+
             }
           }
+         
           selectedAnswer = ""
           columnSelected = []
           rowSelected = []
-          console.log(this.remainingWords)
+
         });
       });
       board.addEventListener('mouseover', event => {
@@ -301,9 +306,10 @@
     align-items: center;
     width: 100%;
     flex-grow: 1;
-  }
-  .row {
-    margin: 0;
+ }
+
+  .row{
+    margin:0;
   }
   .grid {
     display: flex;
@@ -317,27 +323,27 @@
     justify-content: center;
   }
   .right {
+    padding-top: 50px;
     font-family: 'Bangers', bold;
     font-size: 2rem;
     color: aliceblue;
     display: flex;
-    justify-content: center;
+
     flex-direction: column;
     align-items: center;
-    text-align: center;
     /* border: 1px solid red; */
     width: 100%;
     background-image: radial-gradient(#293B57, #1C2842);
-    gap: 2rem;
+    gap: 1.7rem;
   }
   .right .timer {
     border-radius: 10px;
     background-image: radial-gradient(#293B57, #1C2842);
     box-shadow: inset 0 0 100px hsla(0, 0%, 0%, .3);
-    width: 200px;
-    height: 80px;
+    width: 150px;
+    height: 60px;
     text-align: center;
-    font-size: 3rem;
+    font-size: 2.5rem;
     justify-content: center;
     align-items: center;
   }
@@ -347,8 +353,8 @@
   .col-design {
     padding: 0;
     border: 2px solid rgb(12, 12, 12);
-    width: 30px;
-    height: 30px;
+    width: 26px;
+    height: 26px;
     font-weight: bolder;
     text-align: center;
     text-transform: uppercase;
@@ -363,8 +369,14 @@
     text-shadow: 2px 2px 4px #000000;
     box-shadow: 2px 2px 4px #000000;
   }
+  .settings-icon{
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-end !important;
+  }
+
   a i {
-    font-size: 2em;
+    font-size: 3em;
   }
   .cell-data {
     user-select: none;
@@ -526,12 +538,154 @@
     gap: 2em;
     width: 100%;
   }
-  .settings-icon{
-    display: flex !important;
-    flex-direction: column !important;
-    justify-content: flex-end !important;
+
+ 
+
+
+  @media screen and (max-width: 1138px){
+    
+  .right {
+      font-size: 2rem;
+      /* border: 1px solid red; */
+      width: 90%;
+      gap: .5em;
   }
+ .right .timer{
+  border-radius: 10px;
+  background-image: radial-gradient(#293B57, #1C2842);
+  box-shadow: inset 0 0 100px hsla(0,0%,0%,.3);
+  width: 200px;
+  height: 60px;
+  text-align: center;
+  font-size: 2.5rem;
+  
+ }
+ .right h1{
+    font-size: 4rem;
+  }
+}
+
+
+@media screen and (max-width: 1025px){
+  .col-design {
+    width: 20px;
+    height: 20px;
+    font-size: 10px;
+  }
+  .right {
+      font-size: 1.5rem;
+      /* border: 1px solid red; */
+      width: 90%;
+      gap: 1.4em;
+      padding-top: 10px;
+  }
+  .right .timer{
+    width: 150px;
+    height: 40px;
+    font-size: 1.5rem;
+  }
+  .right h1{
+      font-size: 3rem;
+    }
+}
+
+@media screen and (max-width: 769px){
   a i{
+    font-size: 2em;
+  }
+  .grid {
+    flex-direction: column-reverse;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .right {
+    font-size: 1rem;
+      gap: .3em;
+  }
+
+  .right .timer{
+    width: 100px;
+    height: 25px;
+    font-size: 1rem;
+  }
+
+  .right h1{
+      font-size: 2rem;
+    }
+    
+}
+
+@media screen and (max-width: 426px){
+  .col-design {
+    width: 17px;
+    height: 17px;
+    font-size: 8px;
+  }
+  
+  .right {
+    font-size: 1rem;
+      gap: .3em;
+  }
+
+  .right .timer{
+    width: 100px;
+    height: 25px;
+    font-size: 1rem;
+  }
+
+  .right h1{
+      font-size: 2rem;
+    }
+
+   button h3{
+    font-size: 1em;
+  }
+
+  .modal-window-success h1{
     font-size: 3em;
   }
+
+  .modal-window-success h3{
+    font-size: 1.5em;
+  }
+
+  .modal-window-failed h1{
+    font-size: 3em;
+  }
+
+  .modal-window-failed h3{
+    font-size: 1.5em;
+  }
+}
+
+
+@media screen and (max-width: 376px){
+  .col-design {
+    width: 15px;
+    height: 15px;
+    font-size: 8px;
+  }
+  
+  .right {
+    font-size: .7rem;
+      gap: .3em;
+  }
+
+  .right .timer{
+    width: 60px;
+    height: 17px;
+    font-size: .7rem;
+  }
+
+  .right h1{
+      font-size: 1.4rem;
+    }
+
+
+   button h3{
+    font-size: .7em;
+  }
+}
+
 </style>
