@@ -65,15 +65,12 @@
         padding: 0;
         margin: 0;
         background-image: radial-gradient(#7DF9FF, #1F30DD);
-        box-shadow: inset 0 0 100px hsla(0, 0%, 0%, .3);
-        background-position: center;
-        background-repeat: no-repeat;
-        background-size: cover;
+        box-shadow: inset 0 0 100px hsla(0,0%,0%,.3);
     }
     .menu h1 {
         font-family: 'Bangers', cursive;
         font-size: 190px;
-        color: white;
+        color: rgb(255, 255, 255);
         text-shadow: 2px 2px 4px #000000;
     }
     .menu .button-class {

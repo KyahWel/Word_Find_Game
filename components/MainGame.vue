@@ -38,7 +38,10 @@
           </div>
         </div>
         <div class="right">
-          <h1>{{minutes}}:{{ seconds }}</h1>
+          <div class="timer">
+          <p><i class="fa-solid fa-clock"></i>{{minutes}}:{{ seconds }}</p>
+          </div>
+          <h1>Words to Find</h1>
           <b-container>
             <b-row class="text-center">
               <b-col v-for="word in words" :key="word" cols="4">
@@ -296,7 +299,9 @@ export default {
   }
 
   .main-container-game {
-    background-color: white;
+    background: url('~/static/14.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
@@ -317,35 +322,59 @@ export default {
     align-items: center;
     width: 100%;
     flex-grow: 1;
-  }
+ }
+
+
   .grid {
     display: flex;
     /* border: 1px solid red; */
-    width: 100%;
+    width: 150%;
+    padding-right: 3%;
   }
   .left {
     display: flex;
     /* border: 1px solid red; */
-    width: 100%;
+    width: 200%;
     display: flex;
     justify-content: center;
   }
   .right {
+    font-family: 'Bangers', bold;
+    font-size: 3rem;
+    color: aliceblue;
     display: flex;
     justify-content: center;
     flex-direction: column;
     align-items: center;
+    text-align: center;
     /* border: 1px solid red; */
-    width: 100%;
+    width: 150%;
+    background-image: radial-gradient(#293B57, #1C2842);
+    padding-top: 3%;
+    padding-bottom: 3%;
+    gap: 4rem ;
   }
+ .right .timer{
+  border-radius: 10px;
+  background-image: radial-gradient(#293B57, #1C2842);
+  box-shadow: inset 0 0 100px hsla(0,0%,0%,.3);
+  width: 200px;
+  height: 80px;
+  text-align: center;
+  font-size: 3.5rem;
+ }
+ .right h1{
+  font-size: 4.5rem;
+ }
   .col-design {
     padding: 0;
-    border: 1px solid black;
-    width: 30px;
-    height: 30px;
-    text-transform: uppercase;
+    border: 2px solid rgb(12, 12, 12);
+    width: 45px;
+    height: 45px;
+    font-weight: bolder;
     text-align: center;
-    font-size: 12px;
+    text-transform: uppercase;
+    background-color: #FDFEFF
   }
   .menu .button-design-settings {
     font-family: 'Coiny', cursive;
