@@ -3,9 +3,9 @@
     <div class="header">
       <a v-b-modal.modal-multi-game-settings><i class="fa-solid fa-gears"></i></a>
       <a class="btn" href="#open-modal-success">👋 GREAT JOB MODAL</a>
-      <a class="btn" href="#open-modal-failed">👋 OH NO TANGA KA BUTTON</a>
+      <!-- <a class="btn" href="#open-modal-failed">👋 OH NO TANGA KA BUTTON</a> -->
     </div>
-    <div id="open-modal-success" class="modal-window-success">
+    <div v-if="failed" id="open-modal-success" class="modal-window-success">
       <div>
         <a href="#" title="Close" class="modal-close-success">Close</a>
         <h1>GREAT JOB!!</h1>
@@ -16,9 +16,9 @@
         </div>
       </div>
     </div>
-    <div id="open-modal-failed" class="modal-window-failed">
+    <div v-if="failed" id="open-modal-failed" class="modal-window-failed">
       <div>
-        <a href="#" title="Close" class="modal-close-failed">Close</a>
+        <a href="#"  title="Close" class="modal-close-failed">Close</a>
         <h1>OH NO!</h1>
         <h3>YOU'VE RUN OUT OF TIME! AMBOBO MO KASI</h3>
         <div class="modal-buttons">
@@ -71,18 +71,28 @@
 </template>
 
 <script>
-  export default {
-    props: ['words'],
-    data() {
-      return {
-        numRows: this.words.length * 2,
-        numCols: this.words.length * 2,
-        timerCount: 120, //In Seconds
-        minutes: 2,
-        seconds: "00",
-        tempWords: [],
-        selectedAnswer: "",
-        cellsSelected: []
+export default {
+
+  props:['words','time'],
+  data(){
+    return{
+      numRows: this.words.length * 2,
+      numCols: this.words.length * 2 ,
+      timerCount: this.time, 
+      minutes: Math.floor(this.time / 60),
+      seconds: this.time>=60 ? "00" : String(this.time),
+      tempWords: [],
+      remainingWords: this.words.length
+      }
+    },
+    computed: {
+    failed: function() {
+      console.log(this.timerCount === 0)
+      return this.timerCount === 0;
+      },
+    success: function() {
+      console.log(this.remainingWords === 0)
+      return this.remainingWords === 0;
       }
     },
     watch: {
@@ -92,7 +102,7 @@
             setTimeout(() => {
               this.timerCount--;
               this.minutes = Math.floor(this.timerCount / 60);
-              this.seconds = String(this.timerCount > 59 ? this.timerCount - 60 : this.timerCount)
+              this.seconds = String(this.timerCount > 59 ? this.timerCount - (60*(this.minutes)) : this.timerCount)
               this.seconds = this.seconds.length === 1 ? "0" + this.seconds : this.seconds
             }, 1000);
           }
@@ -144,53 +154,50 @@
               //New row Starting Point
               newStartPoint = arr.indexOf(document.querySelector(`.cell-data[data-row="${startRow}"][data-column="${newColumnPoint}"]`))
             }
-          } else if (getOrientation === 'column') {
+          } 
+          else if(getOrientation === 'column'){
             nextLetter = this.numCols
-            if ((startRow * 1) + wordsArray[i].length <= this.numRows) {
+            if((startRow*1)+ wordsArray[i].length <= this.numRows){
               newStartPoint = start
-            } else {
+            }
+            else{
               var newRowPoint = this.numRows - wordsArray[i].length
-              //New column Starting Point
               newStartPoint = arr.indexOf(document.querySelector(`.cell-data[data-row="${newRowPoint}"][data-column="${startColumn}"]`))
             }
-          } else if (getOrientation === 'diagonal') {
-            nextLetter = 1 + this.numCols
-            if ((startColumn * 1) + wordsArray[i].length <= this.numCols &&
-              (startRow * 1) + wordsArray[i].length <= this.numRows) {
-              newStartPoint = start
-            }
-            //Column
-            if ((startColumn * 1) + wordsArray[i].length > this.numCols) {
-              var newColStartPoint = this.numCols - wordsArray[i].length
-              newStartPoint = arr.indexOf(document.querySelector(`.cell-data[data-row="${startRow}"][data-column="${newColStartPoint}"]`))
-              console.log(`[1] Word: ${wordsArray[i]}, New Start: ${newStartPoint}, New Row: ${startRow}, Column: ${newColStartPoint}, Orientation: ${getOrientation}`)
-            }
-            //Row
-            if ((startRow * 1) + wordsArray[i].length > this.numRows) {
-              var newRowStartPoint = (this.numRows - wordsArray[i].length) + 1
-              newStartPoint = arr.indexOf(document.querySelector(`.cell-data[data-row="${newRowStartPoint}"][data-column="${startColumn}"]`))
-              console.log(`[2] Word: ${wordsArray[i]}, New Start: ${newStartPoint}, New Row: ${newRowStartPoint}, Column: ${startColumn}, Orientation: ${getOrientation}`)
-            }
-            if ((startColumn * 1) + wordsArray[i].length > this.numCols &&
-              (startRow * 1) + wordsArray[i].length > this.numRows) {
-              var newColStartPoint = this.numRows - wordsArray[i].length
-              var newRowStartPoint = this.numCols - wordsArray[i].length
-              newStartPoint = arr.indexOf(document.querySelector(`.cell-data[data-row="${newRowStartPoint}"][data-column="${newColStartPoint}"]`))
-              console.log(`[3] Word: ${wordsArray[i]}, New Start: ${newStartPoint}, New Row: ${newRowStartPoint}, New Column: ${newColStartPoint}, Orientation: ${getOrientation}`)
-            }
           }
+          else if(getOrientation === 'diagonal'){
+          nextLetter = 1 + this.numCols
+          if((startColumn*1)+ wordsArray[i].length <= this.numCols && 
+          (startRow*1)+ wordsArray[i].length <= this.numRows){
+            newStartPoint = start
+          }
+          //Column
+          if((startColumn*1)+ wordsArray[i].length > this.numCols){
+            var newColStartPoint = this.numCols - wordsArray[i].length
+            newStartPoint = arr.indexOf(document.querySelector(`.cell-data[data-row="${startRow}"][data-column="${newColStartPoint}"]`))
+          }
+           //Row
+           if((startRow*1)+ wordsArray[i].length > this.numRows ){
+            var newRowStartPoint= (this.numRows - wordsArray[i].length)+1
+            newStartPoint = arr.indexOf(document.querySelector(`.cell-data[data-row="${newRowStartPoint}"][data-column="${startColumn}"]`))
+          }
+          if((startColumn*1)+ wordsArray[i].length > this.numCols && 
+          (startRow*1)+ wordsArray[i].length > this.numRows){
+            var newColStartPoint = this.numRows - wordsArray[i].length
+            var newRowStartPoint= this.numCols - wordsArray[i].length
+            newStartPoint = arr.indexOf(document.querySelector(`.cell-data[data-row="${newRowStartPoint}"][data-column="${newColStartPoint}"]`))
+          }
+        }
           var characters = wordsArray[i].split("");
           var nextPosition = 0
           var isCellOccupied = this.checkCellOccupied(wordsArray[i], newStartPoint, getOrientation)
-          if (isCellOccupied === 'empty') {
-            characters.forEach(item => {
+          if(isCellOccupied === 'empty'){
+              characters.forEach(item => {
               individuals[newStartPoint + nextPosition].innerText = item
               individuals[newStartPoint + nextPosition].setAttribute('data-word', wordsArray[i])
-              individuals[newStartPoint + nextPosition].style.backgroundColor = "rgba(88, 248, 73, 0.507)";
+              //individuals[newStartPoint + nextPosition].style.backgroundColor = "rgba(88, 248, 73, 0.507)";
               nextPosition += nextLetter;
             });
-          } else {
-            this.tempWords.push(wordsArray[i])
           }
         }
       },
@@ -203,39 +210,78 @@
           }
         }
       },
-    },
-    mounted() {
-      this.placeCorrectWords(this.words)
-      this.placeCorrectWords(this.tempWords)
-      this.generateRandomLetter()
-      const cells = document.querySelectorAll('#board .cell-data');
-      const board = document.getElementById('board');
-      let isDragging = false
-      var arr = Array.prototype.slice.call(cells);
-      cells.forEach(cell => {
-        cell.addEventListener('mousedown', event => {
-          isDragging = true;
-          event.target.classList.add('selected');
-          console.log(arr.indexOf(event.target));
-          console.log(this.selectedAnswer)
+   
+  },
+  mounted(){
+    this.placeCorrectWords(this.words)
+    this.placeCorrectWords(this.tempWords)
+    this.generateRandomLetter()
+
+    const cells = document.querySelectorAll('#board .cell-data');
+    const board = document.getElementById('board');
+    let isDragging = false
+    var columnSelected = []
+    var rowSelected = []
+    var selectedAnswer = ""
+
+    cells.forEach(cell => {
+    cell.addEventListener('mousedown', event => {
+      if(!event.target.classList.contains('correct')){
+        const startRow = parseInt(event.target.getAttribute('data-row'));
+        const startCol = parseInt(event.target.getAttribute('data-column'));
+        isDragging = true;
+        event.target.classList.add('selected')
+        selectedAnswer += event.target.innerText
+        columnSelected.push(startCol)
+        rowSelected.push(startRow)
+      }
+      
+    });
+
+      cell.addEventListener('mouseup', () => {
+        cells.forEach(cellDeselect =>{
+          cellDeselect.classList.remove('selected');
         });
-        cell.addEventListener('mouseup', () => {
-          isDragging = false;
-        });
-      });
-      board.addEventListener('mouseover', event => {
-        if (isDragging) {
-          const currentRow = parseInt(event.target.getAttribute('data-row'));
-          const currentCol = parseInt(event.target.getAttribute('data-column'));
-          const cell = document.querySelector(`.cell-data[data-row="${currentRow}"][data-column="${currentCol}"]`);
-          if (cell) {
-            cell.classList.add('selected');
-            console.log(arr.indexOf(cell));
+        isDragging = false;
+        if(this.words.some(item => item.toLowerCase() === selectedAnswer.toLowerCase())){
+          this.remainingWords-=1;
+          for(let i=0; i<columnSelected.length;i++){
+            let rowCorrect = rowSelected[i]
+            let colCorrect = columnSelected[i]
+            const cell = document.querySelector(`.cell-data[data-row="${rowCorrect}"][data-column="${colCorrect}"]`);
+            cell.classList.add('correct')
           }
         }
+        console.log(selectedAnswer)
+        console.log(columnSelected)
+        console.log(rowSelected)
+        console.log(this.remainingWords)
+
+        selectedAnswer = ""
+        columnSelected = []
+        rowSelected = []
+
       });
-    },
-  }
+    });
+
+    board.addEventListener('mouseover', event => {
+    if(!event.target.classList.contains('correct')){
+      if (isDragging) {
+        const currentRow = parseInt(event.target.getAttribute('data-row'));
+        const currentCol = parseInt(event.target.getAttribute('data-column'));
+        const cell = document.querySelector(`.cell-data[data-row="${currentRow}"][data-column="${currentCol}"]`);
+            if (cell) {
+              cell.classList.add('selected');
+              selectedAnswer += cell.innerText
+            }
+        columnSelected.push(currentCol)
+        rowSelected.push(currentRow)
+        } 
+      }
+     });
+  },
+  
+}
 </script>
 
 
@@ -244,6 +290,11 @@
   .selected {
     background-color: yellow;
   }
+
+  .correct {
+    background-color: rgba(88, 248, 73, 0.507)
+  }
+
   .main-container-game {
     background-color: white;
     display: flex;
@@ -290,8 +341,8 @@
   .col-design {
     padding: 0;
     border: 1px solid black;
-    width: 25px;
-    height: 25px;
+    width: 30px;
+    height: 30px;
     text-transform: uppercase;
     text-align: center;
     font-size: 12px;

@@ -1,7 +1,7 @@
 <template>
     <div class="main-container">
         <transition name="home">
-            <MainGame v-if="playInit" :words="words" />
+            <MainGame v-if="playInit" :words="words" :time="time" />
         </transition>
         <div v-if="!playInit" class="menu">
             <h1>WORD FIND</h1>
@@ -32,6 +32,7 @@
       data() {
           return {
               playInit: false,
+              time: 10, //in seconds
               words: ['apple', 'banana', 'cherry', 'date', 'fig', 'grape', 'honeydew', 'kiwi', 'lemon'],
               credits: [
                   { name: 'William', image: 'https://via.placeholder.com/100' },
