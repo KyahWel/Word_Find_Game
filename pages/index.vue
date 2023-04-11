@@ -7,7 +7,7 @@
             <h1>WORD FIND</h1>
             <div v-if="!playInit" class="button-class">
                 <b-button @click="playInit= true" class="button-play">Play</b-button>
-                <b-button v-b-modal.modal-multi-credits class="button-settings">Credits</b-button>
+                <b-button v-b-modal.modal-multi-credits class="button-credits">Credits</b-button>
             </div>
           <b-modal id="modal-multi-credits" hide-footer centered>
 <template #modal-title>
@@ -132,22 +132,7 @@
         box-shadow: 0 5px #3ffa6e;
         transform: translateY(4px);
     }
-    .button-settings {
-        padding: 2px 30px 2px 30px;
-        background: linear-gradient(#6d9fb6 25%, #397691 50%);
-        border-radius: 10px;
-        margin-bottom: 25px;
-        box-shadow: 0 10px #6d9fb6;
-    }
-    .button-settings:hover {
-        box-shadow: 0 8px #6d9fb6;
-        transform: translateY(1px);
-    }
-    .button-settings:active {
-        box-shadow: 0 5px #6d9fb6;
-        transform: translateY(4px);
-    }
-    .button-show-credits {
+    .button-credits {
         padding: 2px 30px 2px 30px;
         background: linear-gradient(#6d9fb6 25%, #397691 50%);
         border-radius: 10px;
@@ -155,11 +140,11 @@
         box-shadow: 0 10px #6d9fb6;
         -webkit-text-stroke: .8px #000000;
     }
-    .button-show-credits:hover {
+    .button-credits:hover {
         box-shadow: 0 8px #6d9fb6;
         transform: translateY(1px);
     }
-    .button-show-credits:active {
+    .button-credits:active {
         box-shadow: 0 5px #6d9fb6;
         transform: translateY(4px);
     }
