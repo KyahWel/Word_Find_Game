@@ -129,7 +129,7 @@ export default {
         return status
       },
       placeCorrectWords(wordsArray) {
-        var positions = ['row', 'column']
+        var positions = ['row', 'column','diagonal']
         var nextLetter = 0
         var newStartPoint = 0
         const cells = document.querySelectorAll('#board .cell-data');
@@ -189,7 +189,7 @@ export default {
               characters.forEach(item => {
               individuals[newStartPoint + nextPosition].innerText = item
               individuals[newStartPoint + nextPosition].setAttribute('data-word', wordsArray[i])
-              individuals[newStartPoint + nextPosition].style.color = "green";
+              //individuals[newStartPoint + nextPosition].style.backgroundColor = "rgb(11, 253, 11)";
               nextPosition += nextLetter;
             });
           }
