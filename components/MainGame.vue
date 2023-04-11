@@ -2,28 +2,22 @@
   <div class="main-container-game">
     <div class="header">
       <a v-b-modal.modal-multi-game-settings><i class="fa-solid fa-gears"></i></a>
-      <a class="btn" href="#open-modal-success">👋 GREAT JOB MODAL</a>
-      <!-- <a class="btn" href="#open-modal-failed">👋 OH NO TANGA KA BUTTON</a> -->
     </div>
     <div v-if="failed" id="open-modal-success" class="modal-window-success">
       <div>
-        <a href="#" title="Close" class="modal-close-success">Close</a>
         <h1>GREAT JOB!!</h1>
         <h3>YOU'VE FINISHED THE PUZZLE</h3>
         <div class="modal-buttons">
-          <b-button class="button-play">PLAY AGAIN</b-button>
-          <b-button class="button-quit-game">EXIT GAME</b-button>
+          <b-button href="/" class="button-quit-game">EXIT GAME</b-button>
         </div>
       </div>
     </div>
     <div v-if="failed" id="open-modal-failed" class="modal-window-failed">
       <div>
-        <a href="#"  title="Close" class="modal-close-failed">Close</a>
         <h1>OH NO!</h1>
-        <h3>YOU'VE RUN OUT OF TIME! AMBOBO MO KASI</h3>
+        <h3>YOU'VE RUN OUT OF TIME!</h3>
         <div class="modal-buttons">
-          <b-button class="button-play">TRY AGAIN</b-button>
-          <b-button class="button-quit-game">EXIT GAME</b-button>
+          <b-button href="/" class="button-quit-game">EXIT GAME</b-button>
         </div>
       </div>
     </div>
@@ -65,7 +59,7 @@
 
         <b-modal id="modal-multi-2" no-close-on-backdrop centered hide-footer>
           <h2>Are you sure?</h2>
-          <b-button v-b-modal.modal-multi-1 size="sm" block class="button-quit-game">
+          <b-button href="/" v-b-modal.modal-multi-1 size="sm" block class="button-quit-game">
             <h3>QUIT GAME</h3>
           </b-button>
         </b-modal>
@@ -90,7 +84,6 @@ export default {
     },
     computed: {
     failed: function() {
-      console.log(this.timerCount === 0)
       return this.timerCount === 0;
       },
     success: function() {
@@ -154,7 +147,6 @@ export default {
               newStartPoint = start
             } else {
               var newColumnPoint = this.numCols - wordsArray[i].length
-              //New row Starting Point
               newStartPoint = arr.indexOf(document.querySelector(`.cell-data[data-row="${startRow}"][data-column="${newColumnPoint}"]`))
             }
           } 
@@ -189,8 +181,8 @@ export default {
             var newColStartPoint = this.numRows - wordsArray[i].length
             var newRowStartPoint= this.numCols - wordsArray[i].length
             newStartPoint = arr.indexOf(document.querySelector(`.cell-data[data-row="${newRowStartPoint}"][data-column="${newColStartPoint}"]`))
+              }
           }
-        }
           var characters = wordsArray[i].split("");
           var nextPosition = 0
           var isCellOccupied = this.checkCellOccupied(wordsArray[i], newStartPoint, getOrientation)
@@ -198,10 +190,14 @@ export default {
               characters.forEach(item => {
               individuals[newStartPoint + nextPosition].innerText = item
               individuals[newStartPoint + nextPosition].setAttribute('data-word', wordsArray[i])
-              //individuals[newStartPoint + nextPosition].style.backgroundColor = "rgba(88, 248, 73, 0.507)";
+              //individuals[newStartPoint + nextPosition].style.color = "rgba(88, 248, 73, 0.507)";
               nextPosition += nextLetter;
             });
           }
+          else {
+            this.tempWords.push(wordsArray[i])
+          }
+          console.log(`${wordsArray[i]} is placed`)
         }
       },
       generateRandomLetter() {
@@ -241,13 +237,13 @@ export default {
       
     });
 
-      cell.addEventListener('mouseup', () => {
+    cell.addEventListener('mouseup', () => {
         cells.forEach(cellDeselect =>{
           cellDeselect.classList.remove('selected');
         });
         isDragging = false;
         if(this.words.some(item => item.toLowerCase() === selectedAnswer.toLowerCase())){
-          this.remainingWords-=1;
+          this.remainingWords--;
           for(let i=0; i<columnSelected.length;i++){
             let rowCorrect = rowSelected[i]
             let colCorrect = columnSelected[i]
@@ -255,15 +251,10 @@ export default {
             cell.classList.add('correct')
           }
         }
-        console.log(selectedAnswer)
-        console.log(columnSelected)
-        console.log(rowSelected)
-        console.log(this.remainingWords)
-
         selectedAnswer = ""
         columnSelected = []
         rowSelected = []
-
+        console.log(this.remainingWords)
       });
     });
 
@@ -504,17 +495,13 @@ export default {
     bottom: 0;
     left: 0;
     z-index: 999;
-    visibility: hidden;
-    opacity: 0;
-    pointer-events: none;
-    transition: all 0.3s;
-  }
-  .modal-window-failed:target {
     visibility: visible;
     opacity: 1;
     pointer-events: auto;
     background-color: #ff0000bd;
+    transition: all 0.3s;
   }
+
   .modal-window-failed>div {
     color: #fff;
     width: 600px;

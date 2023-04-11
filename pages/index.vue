@@ -32,7 +32,7 @@
       data() {
           return {
               playInit: false,
-              time: 10, //in seconds
+              time: 180, //in seconds
               words: ['apple', 'banana', 'cherry', 'date', 'fig', 'grape', 'honeydew', 'kiwi', 'lemon'],
               credits: [
                   { name: 'William', image: 'https://via.placeholder.com/100' },
