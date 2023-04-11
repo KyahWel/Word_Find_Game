@@ -64,7 +64,9 @@ export default {
       timerCount: 120, //In Seconds
       minutes: 2,
       seconds: "00",
-      tempWords: []
+      tempWords: [],
+      selectedAnswer: "",
+      cellsSelected: []
       }
     },
     watch: {
@@ -113,13 +115,14 @@ export default {
       var positions = ['row', 'column','diagonal']
       var nextLetter = 0
       var newStartPoint = 0
+      const cells = document.querySelectorAll('#board .cell-data');
+      var arr = Array.prototype.slice.call(cells);
+
       for(let i = 0 ; i<wordsArray.length; i++){
         var getOrientation = positions[Math.floor(Math.random()*positions.length)] 
         const individuals = document.querySelectorAll('.cell-data');
         const start = Math.floor(Math.random()*individuals.length)
-        
         const startRow = individuals[start].getAttribute('data-row');
-        
         const startColumn = individuals[start].getAttribute('data-column');
     
         if(getOrientation === 'row'){
@@ -128,9 +131,9 @@ export default {
             newStartPoint = start
           }
           else{
-            var newColumnPoint = this.numCols - wordsArray[i].length - 1
+            var newColumnPoint = this.numCols - wordsArray[i].length
             //New row Starting Point
-            newStartPoint = ((startRow-1)*this.numCols)+(newColumnPoint-1)
+            newStartPoint = arr.indexOf(document.querySelector(`.cell-data[data-row="${startRow}"][data-column="${newColumnPoint}"]`))
           }
         }
         else if(getOrientation === 'column'){
@@ -139,9 +142,9 @@ export default {
             newStartPoint = start
           }
           else{
-            var newRowPoint = this.numRows - wordsArray[i].length - 1
+            var newRowPoint = this.numRows - wordsArray[i].length
             //New column Starting Point
-            newStartPoint = newRowPoint * startColumn
+            newStartPoint = arr.indexOf(document.querySelector(`.cell-data[data-row="${newRowPoint}"][data-column="${startColumn}"]`))
           }
         }
         else if(getOrientation === 'diagonal'){
@@ -151,27 +154,22 @@ export default {
             newStartPoint = start
           }
           //Column
-          else if((startColumn*1)+ wordsArray[i].length > this.numCols &&
-          (startRow*1)+ wordsArray[i].length <= this.numRows ){
-            var newRowStartPoint= this.numCols - (wordsArray[i].length-1)
-            //New row Starting Point
-            newStartPoint = (newRowStartPoint * this.numRows) - (this.numRows - startRow)
+          if((startColumn*1)+ wordsArray[i].length > this.numCols){
+            var newColStartPoint = this.numCols - wordsArray[i].length
+            newStartPoint = arr.indexOf(document.querySelector(`.cell-data[data-row="${startRow}"][data-column="${newColStartPoint}"]`))
             console.log(`[1] Word: ${wordsArray[i]}, New Start: ${newStartPoint}, New Row: ${startRow}, Column: ${newColStartPoint}, Orientation: ${getOrientation}`)
           }
            //Row
-           else if((startColumn*1)+ wordsArray[i].length <= this.numCols && 
-           (startRow*1)+ wordsArray[i].length > this.numRows ){
-            var newColStartPoint = this.numRows - (wordsArray[i].length-1)
-            //New column Starting Point
-            newStartPoint = ((newColStartPoint* this.numCols) - (this.numCols - startColumn) - 1)
+           if((startRow*1)+ wordsArray[i].length > this.numRows ){
+            var newRowStartPoint= (this.numRows - wordsArray[i].length)+1
+            newStartPoint = arr.indexOf(document.querySelector(`.cell-data[data-row="${newRowStartPoint}"][data-column="${startColumn}"]`))
             console.log(`[2] Word: ${wordsArray[i]}, New Start: ${newStartPoint}, New Row: ${newRowStartPoint}, Column: ${startColumn}, Orientation: ${getOrientation}`)
           }
-          else if((startColumn*1)+ wordsArray[i].length > this.numCols && 
+          if((startColumn*1)+ wordsArray[i].length > this.numCols && 
           (startRow*1)+ wordsArray[i].length > this.numRows){
-            var newColStartPoint = this.numRows - (wordsArray[i].length-1)
-            var newRowStartPoint= this.numCols - (wordsArray[i].length-1)
-            //Fix this shit
-            newStartPoint =((newRowStartPoint * this.numRows) - (this.numRows - startRow)) - this.numCols 
+            var newColStartPoint = this.numRows - wordsArray[i].length
+            var newRowStartPoint= this.numCols - wordsArray[i].length
+            newStartPoint = arr.indexOf(document.querySelector(`.cell-data[data-row="${newRowStartPoint}"][data-column="${newColStartPoint}"]`))
             console.log(`[3] Word: ${wordsArray[i]}, New Start: ${newStartPoint}, New Row: ${newRowStartPoint}, New Column: ${newColStartPoint}, Orientation: ${getOrientation}`)
           }
         }
@@ -211,19 +209,20 @@ export default {
 
     const cells = document.querySelectorAll('#board .cell-data');
     const board = document.getElementById('board');
-    let isDragging = false;
-    let startRow, startCol;
-
+    let isDragging = false
+    var arr = Array.prototype.slice.call(cells);
+    
     cells.forEach(cell => {
     cell.addEventListener('mousedown', event => {
       isDragging = true;
-      startRow = parseInt(event.target.getAttribute('data-row'));
-      startCol = parseInt(event.target.getAttribute('data-column'));
       event.target.classList.add('selected');
+      console.log(arr.indexOf(event.target));
+      console.log(this.selectedAnswer)
     });
 
       cell.addEventListener('mouseup', () => {
         isDragging = false;
+
       });
     });
 
@@ -231,47 +230,15 @@ export default {
     if (isDragging) {
       const currentRow = parseInt(event.target.getAttribute('data-row'));
       const currentCol = parseInt(event.target.getAttribute('data-column'));
-
-      if (currentCol === startCol) {
-        const minRow = Math.min(startRow, currentRow);
-        const maxRow = Math.max(startRow, currentRow);
-
-        for (let i = minRow; i <= maxRow; i++) {
-          const cell = document.querySelector(`.cell-data[data-row="${i}"][data-column="${startCol}"]`);
+      const cell = document.querySelector(`.cell-data[data-row="${currentRow}"][data-column="${currentCol}"]`);
           if (cell) {
             cell.classList.add('selected');
+            console.log(arr.indexOf(cell));
           }
-        }
-      }
-      else if (Math.abs(currentCol - startCol) === Math.abs(currentRow - startRow)) {
-        const minRow = Math.min(startRow, currentRow);
-        const maxRow = Math.max(startRow, currentRow);
-        const minCol = Math.min(startCol, currentCol);
-        const maxCol = Math.max(startCol, currentCol);
-
-        for (let i = minRow, j = minCol; i <= maxRow && j <= maxCol; i++, j++) {
-          const cell = document.querySelector(`.cell-data[data-row="${i}"][data-column="${j}"]`);
-          if (cell) {
-            cell.classList.add('selected');
-          }
-        }
-      }
-      else {
-        const minCol = Math.min(startCol, currentCol);
-        const maxCol = Math.max(startCol, currentCol);
-
-        for (let i = minCol; i <= maxCol; i++) {
-          const cell = document.querySelector(`.cell-data[data-row="${startRow}"][data-column="${i}"]`);
-          if (cell) {
-            cell.classList.add('selected');
-              }
-            }
-          }
-        }
-      });
-
+      } 
+     });
   },
-
+  
 }
 </script>
 
