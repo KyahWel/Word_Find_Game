@@ -33,7 +33,7 @@
           return {
               playInit: false,
               time: 180, //in seconds
-              words: ['apple', 'banana', 'cherry', 'date', 'fig', 'grape', 'honeydew', 'kiwi', 'lemon'],
+              words: ['test', 'banana', 'cherry', 'date', 'fig', 'grape', 'honeydew', 'kiwi', 'lemon'],
               credits: [
                   { name: 'William', image: 'https://via.placeholder.com/100' },
                   { name: 'Franco', image: 'https://via.placeholder.com/100' },
@@ -136,7 +136,7 @@
         border-radius: 10px;
         margin-bottom: 25px;
         box-shadow: 0 10px #6d9fb6;
-        -webkit-text-stroke: .8px #000000;
+        -webkit-text-stroke: .4px #000000;
     }
     .button-credits:hover {
         box-shadow: 0 8px #6d9fb6;

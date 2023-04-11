@@ -3,12 +3,12 @@
     <div class="header">
       <a v-b-modal.modal-multi-game-settings><i class="fa-solid fa-gears"></i></a>
     </div>
-    <div v-if="failed" id="open-modal-success" class="modal-window-success">
+    <div v-if="this.remainingWords === 0" id="open-modal-success" class="modal-window-success">
       <div>
         <h1>GREAT JOB!!</h1>
         <h3>YOU'VE FINISHED THE PUZZLE</h3>
         <div class="modal-buttons">
-          <b-button href="/" class="button-quit-game">EXIT GAME</b-button>
+          <b-button class="button-quit-game" @click="navigateToIndex()">EXIT GAME</b-button>
         </div>
       </div>
     </div>
@@ -17,7 +17,7 @@
         <h1>OH NO!</h1>
         <h3>YOU'VE RUN OUT OF TIME!</h3>
         <div class="modal-buttons">
-          <b-button href="/" class="button-quit-game">EXIT GAME</b-button>
+          <b-button class="button-quit-game" @click="navigateToIndex()">EXIT GAME</b-button>
         </div>
       </div>
     </div>
@@ -47,29 +47,28 @@
       </div>
       <b-modal id="modal-multi-game-settings" no-close-on-backdrop centered hide-footer hide-header>
         <template #default="{ close }">
-                          <b-button @click="close()" block class="button-play">
-                            <h3>CONTINUE</h3>
-                          </b-button>
-                        
-                        <b-button v-b-modal.modal-multi-2 block class="button-quit-game">
-                          <h3>QUIT GAME</h3>
-                        </b-button>
-</template>
-        </b-modal>
-
-        <b-modal id="modal-multi-2" no-close-on-backdrop centered hide-footer>
-          <h2>Are you sure?</h2>
-          <b-button href="/" v-b-modal.modal-multi-1 size="sm" block class="button-quit-game">
+          <b-button @click="close()" block class="button-play">
+            <h3>CONTINUE</h3>
+          </b-button>             
+          <b-button v-b-modal.modal-multi-2 block class="button-quit-game">
             <h3>QUIT GAME</h3>
           </b-button>
-        </b-modal>
+        </template>
+      </b-modal>
+
+      <b-modal id="modal-multi-2" no-close-on-backdrop centered hide-footer>
+        <h2>Are you sure?</h2>
+        <b-button @click="navigateToIndex()" v-b-modal.modal-multi-1 size="sm" block class="button-quit-game">
+          <h3>QUIT GAME</h3>
+        </b-button>
+      </b-modal>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-
+  
   props:['words','time'],
   data(){
     return{
@@ -86,10 +85,7 @@ export default {
     failed: function() {
       return this.timerCount === 0;
       },
-    success: function() {
-      console.log(this.remainingWords === 0)
-      return this.remainingWords === 0;
-      }
+
     },
     watch: {
       timerCount: {
@@ -107,6 +103,9 @@ export default {
       }
     },
     methods: {
+      navigateToIndex() {
+        location.reload();
+      },
       checkCellOccupied(word, startPosition, orientation) {
         var status = ''
         var incrementBy = 0
@@ -130,7 +129,7 @@ export default {
         return status
       },
       placeCorrectWords(wordsArray) {
-        var positions = ['row', 'column', 'diagonal']
+        var positions = ['row', 'column']
         var nextLetter = 0
         var newStartPoint = 0
         const cells = document.querySelectorAll('#board .cell-data');
@@ -190,7 +189,7 @@ export default {
               characters.forEach(item => {
               individuals[newStartPoint + nextPosition].innerText = item
               individuals[newStartPoint + nextPosition].setAttribute('data-word', wordsArray[i])
-              //individuals[newStartPoint + nextPosition].style.color = "rgba(88, 248, 73, 0.507)";
+              individuals[newStartPoint + nextPosition].style.color = "green";
               nextPosition += nextLetter;
             });
           }
@@ -230,6 +229,7 @@ export default {
         const startCol = parseInt(event.target.getAttribute('data-column'));
         isDragging = true;
         event.target.classList.add('selected')
+        console.log(event.target)
         selectedAnswer += event.target.innerText
         columnSelected.push(startCol)
         rowSelected.push(startRow)
@@ -282,13 +282,16 @@ export default {
 
 <style scoped>
   .selected {
-    background-color: yellow;
+    background-color: blue;
   }
 
   .correct {
-    background-color: rgba(88, 248, 73, 0.507)
+    background-color: rgb(11, 253, 11)
   }
 
+  .board{
+    background-color: white;
+  }
   .main-container-game {
     background: url('~/static/14.jpg');
     background-repeat: no-repeat;
@@ -307,6 +310,7 @@ export default {
     justify-content: flex-end;
     padding: 10px 20px;
   }
+
   .main-content {
     display: flex;
     justify-content: center;
@@ -315,23 +319,25 @@ export default {
     flex-grow: 1;
  }
 
-
+  .row{
+    margin:0;
+  }
   .grid {
     display: flex;
-    /* border: 1px solid red; */
-    width: 150%;
-    padding-right: 3%;
+   
+    width: 100%;
+  
   }
   .left {
     display: flex;
     /* border: 1px solid red; */
-    width: 200%;
+    width: 100%;
     display: flex;
     justify-content: center;
   }
   .right {
     font-family: 'Bangers', bold;
-    font-size: 3rem;
+    font-size: 2rem;
     color: aliceblue;
     display: flex;
     justify-content: center;
@@ -339,11 +345,9 @@ export default {
     align-items: center;
     text-align: center;
     /* border: 1px solid red; */
-    width: 150%;
+    width: 100%;
     background-image: radial-gradient(#293B57, #1C2842);
-    padding-top: 3%;
-    padding-bottom: 3%;
-    gap: 4rem ;
+    gap: 2rem ;
   }
  .right .timer{
   border-radius: 10px;
@@ -352,20 +356,21 @@ export default {
   width: 200px;
   height: 80px;
   text-align: center;
-  font-size: 3.5rem;
+  font-size: 3rem;
+  justify-content: center;
+  align-items: center;
  }
  .right h1{
-  font-size: 4.5rem;
+  font-size: 4rem;
  }
   .col-design {
     padding: 0;
     border: 2px solid rgb(12, 12, 12);
-    width: 45px;
-    height: 45px;
+    width: 30px;
+    height: 30px;
     font-weight: bolder;
     text-align: center;
     text-transform: uppercase;
-    background-color: #FDFEFF
   }
   .menu .button-design-settings {
     font-family: 'Coiny', cursive;
@@ -408,7 +413,7 @@ export default {
     transition: 0.3s ease;
     font-weight: 800;
     font-family: 'Coiny', cursive;
-    font-size: 2em;
+    font-size: 1.5em;
   }
   .button-play {
     padding: 2px 30px 2px 30px;
@@ -445,17 +450,13 @@ export default {
     bottom: 0;
     left: 0;
     z-index: 999;
-    visibility: hidden;
-    opacity: 0;
-    pointer-events: none;
-    transition: all 0.3s;
-  }
-  .modal-window-success:target {
     visibility: visible;
     opacity: 1;
     pointer-events: auto;
-    background-color: #00000052;
+    background-color: #1ab634bd;
+    transition: all 0.3s;
   }
+
   .modal-window-success>div {
     color: #fff;
     width: 600px;
@@ -466,13 +467,17 @@ export default {
     padding: 2em;
   }
   .modal-window-success h1 {
+    font-family: 'Bangers', bold;
     text-align: center;
-    font-size: 5em;
+    font-size: 7em;
     margin-bottom: 0;
+    text-shadow: 1px 0px 3px rgba(0, 0, 0, 1);
   }
   .modal-window-success h3 {
+    text-shadow: 1px 0px 3px rgba(0, 0, 0, 1);
+    font-family: 'Bangers', bold;
     text-align: center;
-    font-size: 1.5em;
+    font-size: 3em;
   }
   .modal-close-success {
     color: #aaa;
@@ -484,6 +489,7 @@ export default {
     top: 0;
     width: 70px;
     text-decoration: none;
+   
   }
   .modal-close-success:hover {
     color: black;
@@ -513,12 +519,14 @@ export default {
   }
   .modal-window-failed h1 {
     text-align: center;
-    font-size: 5em;
+    font-size: 10em;
     margin-bottom: 0;
+    font-family: 'Bangers', bold;
   }
   .modal-window-failed h3 {
     text-align: center;
-    font-size: 1.5em;
+    font-size: 3em;
+    font-family: 'Bangers', bold;
   }
   .modal-close-failed {
     color: #aaa;
@@ -537,7 +545,7 @@ export default {
   .modal-buttons {
     display: flex;
     justify-content: center;
-    gap: 1em;
+    gap: 2em;
     width: 100%;
   }
 </style>
